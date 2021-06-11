@@ -15,10 +15,10 @@ jobs:
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - name: Docker Build
-        run: docker build . --cache-from yabramkin/powershell-mono-git:latest --file Dockerfile --tag yabramkin/powershell-mono-git:${{steps.tag.outputs.tag}}
+        run: docker build . --cache-from ${{ secrets.DOCKERHUB_REPO }}:latest --file Dockerfile --tag ${{ secrets.DOCKERHUB_REPO }}:${{steps.tag.outputs.tag}}
       - name: Docker Tag
-        run: docker tag yabramkin/powershell-mono-git${{steps.tag.outputs.tag}}  yabramkin/powershell-mono-git:latest
+        run: docker tag ${{ secrets.DOCKERHUB_REPO }}:${{steps.tag.outputs.tag}}  ${{ secrets.DOCKERHUB_REPO }}:latest
       - name: Docker push version
-        run: docker push yabramkin/powershell-mono-git:${{steps.tag.outputs.tag}}
+        run: docker push ${{ secrets.DOCKERHUB_REPO }}:${{steps.tag.outputs.tag}}
       - name: Docker push and update latest
-        run: docker push yabramkin/powershell-mono-git:latest
+        run: docker push ${{ secrets.DOCKERHUB_REPO }}:latest
